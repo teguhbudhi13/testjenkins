@@ -1,0 +1,21 @@
+helm upgrade --install harbor oci://registry-1.docker.io/bitnamicharts/harbor --set global.storageClass=longhorn \
+--set adminPassword=admin123,externalURL=harbor.tebemain.lyr.id \
+--set ingress.core.ingressClassName=nginx,service.type=ClusterIP \
+--set ingress.core.tls=true,ingress.core.selfSigned=true
+
+
+helm upgrade --install harbor oci://registry-1.docker.io/bitnamicharts/harbor --set adminPassword=admin123
+
+
+helm upgrade --install harbor harbor/harbor --set expose.type=ClusterIP,internalTLS.enabled=portal
+
+
+helm install my-harbor harbor/harbor \
+  --set internalTLS.enabled=true \
+  --set expose.tls.auto=true \
+  --set expose.tls.commonName=harbor.tebemain.lyr.id \
+  --set expose.ingress.hosts.core=harbor.tebemain.lyr.id \
+  --set expose.ingress.hosts.notary=notary.harbor.tebemain.lyr.id \
+  --set expose.ingress.hosts.registry=registry.harbor.tebemain.lyr.id \
+  --set expose.ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
+  --set harborAdminPassword=admin1234
